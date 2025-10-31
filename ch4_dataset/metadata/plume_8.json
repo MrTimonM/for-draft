@@ -1,0 +1,13 @@
+{
+  "plume_id": "77636b2d-570f-44c6-952e-dd751f162190",
+  "plume_name": "plume_8",
+  "gas": "CH4",
+  "emission_auto": null,
+  "datetime": null,
+  "instrument": "tan",
+  "quality": null,
+  "sector": "6A",
+  "geometry": null,
+  "assets": {},
+  "downloaded_files": {}
+}

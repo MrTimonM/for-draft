@@ -1,0 +1,6580 @@
+
+Search...
+Account
+Catalog
+Plume Picker
+Geospatial Services
+STAC API
+Tasking
+Common
+Community
+redocly logoAPI docs by Redocly
+CarbonMapper Data Platform API (1.0.0)
+Download OpenAPI specification:Download
+
+Welcome to the Carbon Mapper data API, a programmatic resource for accessing and analyzing methane (CH4) and carbon dioxide (CO2) emissions data. Our API provides access to a wide set of geospatially-oriented emissions data, including plume and source data, atmospheric retrievals, and RGB images, empowering users to conduct insightful research and develop innovative applications.
+
+Caution: API results may contain uncalibrated Tanager first light data
+
+Usage Restrictions:
+To ensure the the API remains responsive to a wide range of users, we implement restrictions designed to prevent excessive resource use, such as rate limiting. When using data from the Carbon Mapper data API, you agree to our Terms of Use and to cite Carbon Mapper as the data provider.
+
+Please visit our public platform page to view API tutorials or report issues in our tracker.
+
+Account
+Obtain Token
+Request Body schema: application/json
+password
+required
+string (Password) <= 128 characters
+email
+required
+string (Email Address) <= 254 characters
+Responses
+200 OK
+
+post
+/api/v1/token/pair
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"password": "string",
+"email": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"refresh": "string",
+"access": "string",
+"groups": "string",
+"permissions": [
+"string"
+]
+}
+Refresh Token
+Request Body schema: application/json
+refresh
+required
+string (Refresh)
+Responses
+200 OK
+
+post
+/api/v1/token/refresh
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"refresh": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{
+"refresh": "string",
+"access": "string"
+}
+Verify Token
+Request Body schema: application/json
+token
+required
+string (Token)
+Responses
+200 OK
+
+post
+/api/v1/token/verify
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"token": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Search Request Create
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+aoi_id	
+string <uuid> (AOI (Area of Interest) ID)
+Saved user-provided AOIs can be re-used in multiple searches. Refer to the [Geospatial Services section for AOI operation information.
+
+name	
+string (Name)
+The user-provided name for the saved search.
+
+query	
+object (Query)
+Default: {}
+When creating a consumer that can save search requests, the application can store its idiomatic search state as JSON for later retrieval and usage. The data structure is arbitrary, but must be represented as an object, and has no impact on API operation. It is left to the application to process the retrieved data.
+
+change_detection_enabled	
+boolean (Change Detection Enabled)
+Whether or not to receive notifications if the search results change.
+
+Notifications are not currently implemented.
+
+change_detection_schedule	
+string (Change Detection Schedule)
+Enum: "Daily" "Weekly" "Monthly"
+The frequency at which to receive change detection notifications.
+
+Notifications are not currently implemented.
+
+Responses
+200 OK
+
+post
+/api/v1/account/search-request
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"aoi_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"name": "string",
+"query": { },
+"change_detection_enabled": true,
+"change_detection_schedule": "Daily"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"aoi": "1145cc23-4692-4a59-8d92-ced16d1750bd",
+"query": { },
+"name": "string",
+"change_detection_enabled": true,
+"change_detection_schedule": "string",
+"created": "2019-08-24T14:15:22Z"
+}
+Search Request Patch
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+Request Body schema: application/json
+aoi_id	
+string <uuid> (AOI (Area of Interest) ID)
+Saved user-provided AOIs can be re-used in multiple searches. Refer to the [Geospatial Services section for AOI operation information.
+
+name	
+string (Name)
+The user-provided name for the saved search.
+
+query	
+object (Query)
+Default: {}
+When creating a consumer that can save search requests, the application can store its idiomatic search state as JSON for later retrieval and usage. The data structure is arbitrary, but must be represented as an object, and has no impact on API operation. It is left to the application to process the retrieved data.
+
+change_detection_enabled	
+boolean (Change Detection Enabled)
+Whether or not to receive notifications if the search results change.
+
+Notifications are not currently implemented.
+
+change_detection_schedule	
+string (Change Detection Schedule)
+Enum: "Daily" "Weekly" "Monthly"
+The frequency at which to receive change detection notifications.
+
+Notifications are not currently implemented.
+
+Responses
+200 OK
+404 Not Found
+
+patch
+/api/v1/account/search-request/{pk}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"aoi_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"name": "string",
+"query": { },
+"change_detection_enabled": true,
+"change_detection_schedule": "Daily"
+}
+Response samples
+200404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"aoi": "1145cc23-4692-4a59-8d92-ced16d1750bd",
+"query": { },
+"name": "string",
+"change_detection_enabled": true,
+"change_detection_schedule": "string",
+"created": "2019-08-24T14:15:22Z"
+}
+Search Request Delete
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+Responses
+200 OK
+404 Not Found
+
+delete
+/api/v1/account/search-request/{pk}
+Response samples
+200404
+Content type
+application/json
+
+Copy
+"string"
+Search Request Get
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+Responses
+200 OK
+
+get
+/api/v1/account/search-request/{pk}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"aoi": "1145cc23-4692-4a59-8d92-ced16d1750bd",
+"query": { },
+"name": "string",
+"change_detection_enabled": true,
+"change_detection_schedule": "string",
+"created": "2019-08-24T14:15:22Z"
+}
+Search Request List
+Authorizations:
+ScopedAuth
+query Parameters
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/account/search-requests
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/account/search-requests",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Oauth
+Request Body schema: application/json
+id_token
+required
+string (Id Token)
+session_state
+required
+string (Session State)
+state
+required
+string (State)
+Responses
+200 OK
+403 Forbidden
+
+post
+/api/v1/account/oauth
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"id_token": "string",
+"session_state": "string",
+"state": "string"
+}
+Response samples
+200403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"refresh": "string",
+"access": "string",
+"groups": "string",
+"permissions": [
+"string"
+]
+}
+User
+Authorizations:
+ScopedAuth
+path Parameters
+user_id
+required
+integer (User Id)
+Responses
+200 OK
+
+get
+/api/v1/account/user/{user_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"label": "string",
+"groups": {
+"property1": [],
+"property2": []
+},
+"organizations": [
+{}
+],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+}
+User Patch
+Authorizations:
+ScopedAuth
+path Parameters
+user_id
+required
+integer (User Id)
+Request Body schema: application/json
+organization	
+string (Organization)
+The user's organization.
+
+title	
+string (Title)
+The user's professional title.
+
+industry	
+string (Industry)
+Enum: "academic" "nonprofit" "government" "media" "finance" "business" "other"
+The user's industry of profession.
+
+usage	
+string (Usage)
+Enum: "personal-research" "work-related-research" "developer" "other"
+The capacity in which the user is using the service.
+
+notes	
+string (Notes)
+Notes related to the user.
+
+Responses
+200 OK
+
+patch
+/api/v1/account/user/{user_id}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"organization": "string",
+"title": "string",
+"industry": "academic",
+"usage": "personal-research",
+"notes": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"label": "string",
+"groups": {
+"property1": [],
+"property2": []
+},
+"organizations": [
+{}
+],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+}
+Me
+Authorizations:
+ScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/account/me
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/account/me",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"label": "string",
+"groups": {
+"property1": [],
+"property2": []
+},
+"organizations": [
+{}
+],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+}
+Me Patch
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+organization	
+string (Organization)
+The user's organization.
+
+title	
+string (Title)
+The user's professional title.
+
+industry	
+string (Industry)
+Enum: "academic" "nonprofit" "government" "media" "finance" "business" "other"
+The user's industry of profession.
+
+usage	
+string (Usage)
+Enum: "personal-research" "work-related-research" "developer" "other"
+The capacity in which the user is using the service.
+
+notes	
+string (Notes)
+Notes related to the user.
+
+Responses
+200 OK
+
+patch
+/api/v1/account/me
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"organization": "string",
+"title": "string",
+"industry": "academic",
+"usage": "personal-research",
+"notes": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"label": "string",
+"groups": {
+"property1": [],
+"property2": []
+},
+"organizations": [
+{}
+],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+}
+Users
+Authorizations:
+ScopedAuth
+query Parameters
+ids	
+Array of integers (Ids)
+search	
+string (Search)
+organizations	
+Array of strings (Organizations)
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/account/users
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/account/users",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Register
+Newly registered users will receive an email with instructions for account verification.
+
+Request Body schema: application/json
+email
+required
+string (Email)
+The user's email address.
+
+password1
+required
+string (Password1)
+Must adhere to the following rules:
+
+8 or more characters
+dissimilar to other user attributes
+cannot be a common password
+cannot be entirely numeric
+password2
+required
+string (Password2)
+Must match password 1.
+
+first_name
+required
+string (First Name)
+The user's first name.
+
+last_name
+required
+string (Last Name)
+The user's last name.
+
+organization	
+string (Organization)
+The user's organization.
+
+title	
+string (Title)
+The user's professional title.
+
+industry	
+string (Industry)
+Enum: "academic" "nonprofit" "government" "media" "finance" "business" "other"
+The user's industry of profession.
+
+usage	
+string (Usage)
+Enum: "personal-research" "work-related-research" "developer" "other"
+The capacity in which the user is using the service.
+
+notes	
+string (Notes)
+Notes related to the user.
+
+Responses
+200 OK
+204 No Content
+403 Forbidden
+
+post
+/api/v1/account/register
+Request samples
+PayloadPython
+Content type
+application/json
+
+Copy
+{
+"email": "user@domain.com",
+"password1": "3v@b8cG4",
+"password2": "3v@b8cG4",
+"first_name": "John",
+"last_name": "Doe",
+"organization": "string",
+"title": "string",
+"industry": "academic",
+"usage": "personal-research",
+"notes": "string"
+}
+Response samples
+403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"errors": {
+"property1": [],
+"property2": []
+}
+}
+Register Verify
+Request Body schema: application/json
+uidb64
+required
+string (Uidb64)
+token
+required
+string (Token)
+Responses
+200 OK
+204 No Content
+403 Forbidden
+
+post
+/api/v1/account/register_verify
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"uidb64": "string",
+"token": "string"
+}
+Response samples
+403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"errors": {
+"property1": [],
+"property2": []
+}
+}
+Request Password Reset
+Request Body schema: application/json
+email
+required
+string (Email Address) <= 254 characters
+Responses
+200 OK
+204 No Content
+403 Forbidden
+
+post
+/api/v1/account/request_password_reset
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"email": "string"
+}
+Response samples
+403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"errors": {
+"property1": [],
+"property2": []
+}
+}
+Reset Password
+Request Body schema: application/json
+new_password1
+required
+string (New Password1)
+Must adhere to the following rules:
+
+8 or more characters
+dissimilar to other user attributes
+cannot be a common password
+cannot be entirely numeric
+new_password2
+required
+string (New Password2)
+Must match password 1.
+
+uidb64
+required
+string (Uidb64)
+token
+required
+string (Token)
+Responses
+200 OK
+403 Forbidden
+422 Unprocessable Entity
+
+post
+/api/v1/account/reset_password
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"new_password1": "3v@b8cG4",
+"new_password2": "3v@b8cG4",
+"uidb64": "string",
+"token": "string"
+}
+Response samples
+200403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"label": "string",
+"groups": {
+"property1": [],
+"property2": []
+},
+"organizations": [
+{}
+],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+}
+Change Password
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+old_password
+required
+string (Old Password)
+The user's current password.
+
+new_password1
+required
+string (New Password1)
+Must adhere to the following rules:
+
+8 or more characters
+dissimilar to other user attributes
+cannot be a common password
+cannot be entirely numeric
+new_password2
+required
+string (New Password2)
+Must match password 1.
+
+Responses
+200 OK
+204 No Content
+403 Forbidden
+
+post
+/api/v1/account/change_password
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"old_password": "string",
+"new_password1": "3v@b8cG4",
+"new_password2": "3v@b8cG4"
+}
+Response samples
+403
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"errors": {
+"property1": [],
+"property2": []
+}
+}
+Tokens Create Stac
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+expiration_date	
+Expiration Date (string) or Expiration Date (null) (Expiration Date)
+name	
+Name (string) or Name (null) (Name)
+Responses
+200 OK
+401 Unauthorized
+
+post
+/api/v1/account/tokens/create-stac
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"expiration_date": "2019-08-24",
+"name": "string"
+}
+Response samples
+200401
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"token_type": "string",
+"token_value": "string",
+"token_object": {
+"user": 0,
+"jti": "string",
+"token_type": "string",
+"scope": "string",
+"groups": "string",
+"organizations": "string",
+"all_group_names": { },
+"exp": 0,
+"iat": 0,
+"name": "string",
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+}
+Tokens List
+Authorizations:
+ScopedAuth
+Responses
+200 OK
+401 Unauthorized
+
+get
+/api/v1/account/tokens
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/account/tokens",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200401
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+[
+{
+"user": 0,
+"jti": "string",
+"token_type": "string",
+"scope": "string",
+"groups": "string",
+"organizations": "string",
+"all_group_names": { },
+"exp": 0,
+"iat": 0,
+"name": "string",
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+]
+Catalog
+Get Asset
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+key
+required
+string (Key) ^[a-zA-Z0-9-_/]+\.[a-z]+$
+Responses
+200 OK
+
+get
+/api/v1/catalog/asset/{key}
+Get plume by Primary Key (UUID) or colloquial id (<scene_id>-<letter>)
+Authorizations:
+OptionalAuth
+path Parameters
+plume_id
+required
+string (Plume Id)
+Responses
+200 OK
+404 Not Found
+
+get
+/api/v1/catalog/plume/{plume_id}
+Response samples
+200404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"plume_id": "GAO20230628t191011p0000-B",
+"gas": "CO2",
+"geometry_json": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"scene_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"scene_timestamp": "2019-08-24T14:15:22Z",
+"instrument": "GAO",
+"mission_phase": "first_light",
+"platform": "string",
+"emission_auto": 0,
+"emission_uncertainty_auto": 0,
+"emission_cmf_type": "string",
+"gsd": 0,
+"sensitivity_mode": "string",
+"off_nadir": 0,
+"plume_png": "string",
+"plume_rgb_png": "string",
+"plume_tif": "string",
+"con_tif": "string",
+"rgb_png": "string",
+"plume_bounds": [
+0
+],
+"plume_quality": "good",
+"wind_speed_avg_auto": 0,
+"wind_direction_avg_auto": 0,
+"emission_version": "string",
+"processing_software": "string",
+"publication_sources": [
+{}
+],
+"is_offshore": false,
+"collection": "string",
+"cmf_type": "string",
+"sector": "string",
+"status": "valid",
+"hide_emission": false,
+"published_at": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Plume Update
+Authorizations:
+ScopedAuth
+path Parameters
+plume_id
+required
+string (Plume Id)
+Request Body schema: application/json
+geometry_json
+required
+object (Point)
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+scene_id
+required
+string <uuid> (Scene ID)
+Universally unique object identifier randomly generated using UUIDv4
+
+gas
+required
+string (Gas)
+Enum: "CO2" "CH4"
+asset_id	
+string <uuid> (Asset ID)
+Universally unique object identifier randomly generated using UUIDv4
+
+notes	
+Notes (string) or Notes (null) (Notes)
+status	
+string (Status) <= 15 characters
+Default: "valid"
+quality	
+Quality (string) or Quality (null) (Quality)
+Default: "good"
+quality_shape	
+Shape (boolean) or Shape (null) (Shape)
+quality_artifacts	
+Intersects Artifacts (boolean) or Intersects Artifacts (null) (Intersects Artifacts)
+quality_flare	
+Intersects Flare (boolean) or Intersects Flare (null) (Intersects Flare)
+quality_background	
+High Background Enhancement (boolean) or High Background Enhancement (null) (High Background Enhancement)
+phme_candidate	
+PHME Candidate (boolean) or PHME Candidate (null) (PHME Candidate)
+sector	
+Sector (string) or Sector (null) (Sector)
+hide_emission	
+boolean (Hide Emission)
+Default: false
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+422 Unprocessable Entity
+
+put
+/api/v1/catalog/plume/{plume_id}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"geometry_json": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"scene_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"gas": "CH4",
+"asset_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"notes": "string",
+"status": "valid",
+"quality": "good",
+"quality_shape": true,
+"quality_artifacts": true,
+"quality_flare": true,
+"quality_background": true,
+"phme_candidate": true,
+"sector": "string",
+"hide_emission": false
+}
+Response samples
+200400401422
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08"
+}
+Plume Patch
+Authorizations:
+ScopedAuth
+path Parameters
+plume_id
+required
+string (Plume Id)
+Request Body schema: application/json
+geometry_json	
+object (Geometry Json)
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+gas	
+string (Gas)
+Enum: "CO2" "CH4"
+asset_id	
+string <uuid> (Asset ID)
+Universally unique object identifier randomly generated using UUIDv4
+
+notes	
+Notes (string) or Notes (null) (Notes)
+status	
+string (Status) <= 15 characters
+Default: "valid"
+quality	
+Quality (string) or Quality (null) (Quality)
+Default: "good"
+quality_shape	
+Shape (boolean) or Shape (null) (Shape)
+quality_artifacts	
+Intersects Artifacts (boolean) or Intersects Artifacts (null) (Intersects Artifacts)
+quality_flare	
+Intersects Flare (boolean) or Intersects Flare (null) (Intersects Flare)
+quality_background	
+High Background Enhancement (boolean) or High Background Enhancement (null) (High Background Enhancement)
+phme_candidate	
+PHME Candidate (boolean) or PHME Candidate (null) (PHME Candidate)
+sector	
+Sector (string) or Sector (null) (Sector)
+hide_emission	
+boolean (Hide Emission)
+Default: false
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+422 Unprocessable Entity
+
+patch
+/api/v1/catalog/plume/{plume_id}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"geometry_json": {
+"coordinates": [],
+"type": "Point"
+},
+"gas": "CH4",
+"asset_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"notes": "string",
+"status": "valid",
+"quality": "good",
+"quality_shape": true,
+"quality_artifacts": true,
+"quality_flare": true,
+"quality_background": true,
+"phme_candidate": true,
+"sector": "string",
+"hide_emission": false
+}
+Response samples
+200400401422
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08"
+}
+Plume Create
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+geometry_json
+required
+object (Point)
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+scene_id
+required
+string <uuid> (Scene ID)
+Universally unique object identifier randomly generated using UUIDv4
+
+gas
+required
+string (Gas)
+Enum: "CO2" "CH4"
+asset_id	
+string <uuid> (Asset ID)
+Universally unique object identifier randomly generated using UUIDv4
+
+notes	
+Notes (string) or Notes (null) (Notes)
+status	
+string (Status) <= 15 characters
+Default: "valid"
+quality	
+Quality (string) or Quality (null) (Quality)
+Default: "good"
+quality_shape	
+Shape (boolean) or Shape (null) (Shape)
+quality_artifacts	
+Intersects Artifacts (boolean) or Intersects Artifacts (null) (Intersects Artifacts)
+quality_flare	
+Intersects Flare (boolean) or Intersects Flare (null) (Intersects Flare)
+quality_background	
+High Background Enhancement (boolean) or High Background Enhancement (null) (High Background Enhancement)
+phme_candidate	
+PHME Candidate (boolean) or PHME Candidate (null) (PHME Candidate)
+sector	
+Sector (string) or Sector (null) (Sector)
+hide_emission	
+boolean (Hide Emission)
+Default: false
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+422 Unprocessable Entity
+
+post
+/api/v1/catalog/plume
+Request samples
+PayloadPython
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"geometry_json": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"scene_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"gas": "CH4",
+"asset_id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"notes": "string",
+"status": "valid",
+"quality": "good",
+"quality_shape": true,
+"quality_artifacts": true,
+"quality_flare": true,
+"quality_background": true,
+"phme_candidate": true,
+"sector": "string",
+"hide_emission": false
+}
+Response samples
+200400401422
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08"
+}
+Plume List Related
+Authorizations:
+ScopedAuth
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+Status (string) or Status (null) (Status)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "emissions_desc" "emissions_asc" "published_desc" "published_asc"
+limit	
+integer (Limit)
+Default: 10
+offset	
+integer (Offset)
+Default: 0
+bbox	
+Array of Bbox (items) or Bbox (null) (Bbox)
+Responses
+200 OK
+
+get
+/api/v1/catalog/plumes/related
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/plumes/related",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox_count": 0,
+"total_count": 0,
+"limit": 0,
+"offset": 0,
+"items": [
+{}
+]
+}
+Get list of plumes with plume emissions and image attributes.
+When downloading data, a hard limit is imposed, use offset for pagination:
+
+limit: default is 500, max is 1000
+offset: default is 0, no max
+datetime: datetime interval, ex: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+For other parameters, refer to PlumeFilterSchema in Schemas section below.
+
+Authorizations:
+OptionalAuth
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+Status (string) or Status (null) (Status)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "emissions_desc" "emissions_asc" "published_desc" "published_asc"
+limit	
+integer (Limit)
+Default: 10
+offset	
+integer (Offset)
+Default: 0
+bbox	
+Array of Bbox (items) or Bbox (null) (Bbox)
+Responses
+200 OK
+
+get
+/api/v1/catalog/plumes/annotated
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/plumes/annotated",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox_count": 0,
+"total_count": 0,
+"limit": 0,
+"offset": 0,
+"items": [
+{}
+],
+"nearby_items": [
+{}
+]
+}
+Download a CSV of plumes.
+A tutorial demonstrating the use of this resource can be found in the platform-public repository.
+
+Responses are paginated. Refer to limit and offset query parameter specifications documented below. Refer to the tutorial for an example of compiling a single CSV from multiple paginated requests.
+
+Authorizations:
+OptionalAuth
+query Parameters
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+exclude_columns	
+Array of strings (Exclude Columns)
+Default: []
+Items Enum: "plume_id" "plume_latitude" "plume_longitude" "datetime" "ipcc_sector" "gas" "emission_cmf_type" "plume_bounds" "instrument" "mission_phase" "published_at" "modified" "emission_version" "processing_software" "gsd" "sensitivity_mode" "off_nadir" "emission_auto" "emission_uncertainty_auto" "wind_speed_avg_auto" "wind_speed_std_auto" "wind_direction_avg_auto" "wind_direction_std_auto" "wind_source_auto" "plume_tif" "plume_png" "con_tif" "rgb_tif" "rgb_png"
+limit	
+integer (Limit) [ 0 .. 100000 ]
+Default: 50000
+Maximum plume rows to return for this page (may be reduced to 10,000 when asset/file columns are included; up to 50,000 allowed when all file columns are excluded).
+
+offset	
+integer (Offset) >= 0
+Default: 0
+The starting row (zero-based) of the page window.
+
+status	
+Status (string) or Status (null) (Status)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "emissions_desc" "emissions_asc" "published_desc" "published_asc"
+Responses
+200 OK
+
+get
+/api/v1/catalog/plume-csv
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/plume-csv",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Publish Plumes
+Authorizations:
+ScopedAuth
+query Parameters
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+Status (string) or Status (null) (Status)
+Responses
+200 OK
+
+put
+/api/v1/catalog/publish_plumes
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Get Response
+path Parameters
+id
+required
+string <uuid> (Id)
+query Parameters
+signature
+required
+string (Signature)
+Responses
+200 OK
+
+get
+/api/v1/catalog/quicklook/{id}/response
+Scenes Dates
+Authorizations:
+ScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/catalog/scenes/dates
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/scenes/dates",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Scenes
+Authorizations:
+ScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Scene Name Search)
+Filter results for scene names containing the provided value.
+
+hasAssignees	
+boolean (Has Assignees)
+Scene has been assigned for assessment by a Post-Emission Quality Control team member.
+
+assignees	
+Array of integers (Assignees)
+Filter for scenes assigned to users with the provided IDs.
+
+assignment_status	
+string (Assignment Status)
+Enum: "To Do" "In Progress" "Done" "Failed" "Deleted"
+assessment_status	
+string (Assessment Status)
+Default: "exclude-do-not-assess"
+Enum: "assessed" "not-assessed" "do-not-assess" "exclude-do-not-assess"
+assignment_modified_datetime	
+string (Assignment Modified Datetime)
+Examples: assignment_modified_datetime=2018-02-12T23:20:50Z assignment_modified_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z assignment_modified_datetime=2018-02-12T00:00:00Z/.. assignment_modified_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+plume_quality	
+string (Plume Quality)
+Enum: "any" "good" "questionable" "bad"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+number (Cloud Cover Pct Min)
+cloud_cover_pct_max	
+number (Cloud Cover Pct Max)
+assessment_cloud_cover_pct	
+integer (Assessment Cloud Cover Pct)
+Enum: 0 25 50 75 100
+has_plume_emissions	
+boolean (Has Plume Emissions)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_statuses	
+Array of strings (Plume Statuses)
+Items Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+is_quick_look	
+boolean (Is Quick Look)
+Deprecated
+Orthorectified preliminary maps of individual atmospheric CH4 and CO2 enhancements (segmented plumes). Otherwise known as “Quick Look” products with:
+
+plume image
+acquisition date & UTC time
+latitude and longitude of plume origin
+initial IME, emission rate, and plume length estimates
+label	
+string (Label)
+Enum: "QL" "QV"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/catalog/scenes
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/scenes",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Scenes Annotated
+This endpoint will return scenes that have been published and are eligible to use for null detection.
+
+The requirements for this is for the cloud cover percentage to be <= 25%, and for the scene to have been assessed.
+
+Specify parameter not_cloudy=True or cloud_cover_pct_max=30 for your own threshold.
+
+Authorizations:
+TokenUserOptionalScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+names	
+Array of strings (Scene Names)
+Examples: names=GAO20230628t190435p0000&names=GAO20230628t185900p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+integer (Minimum Cloud Cover Percentage)
+cloud_cover_pct_max	
+integer (Maximum Cloud Cover Percentage)
+not_cloudy	
+boolean (Not Cloudy)
+Cloud cover percentage <= 25%.
+
+published_plume_count_min	
+integer (Minimum Published Plume Count)
+published_plume_count_max	
+integer (Maximum Published Plume Count)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+intersects	
+any (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+gadm_composite_id	
+string (GADM Composite ID)
+aoi_id	
+string <uuid> (Area of Interest ID)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/catalog/scenes/annotated
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/scenes/annotated",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Scene Get
+Authorizations:
+ScopedAuth
+path Parameters
+scene_id
+required
+string <uuid> (Scene ID)
+Examples: 47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+Responses
+200 OK
+
+get
+/api/v1/catalog/scene/{scene_id}
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/scene/47ac573b-504e-44c4-a998-0f3c19fa0f21",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "47ac573b-504e-44c4-a998-0f3c19fa0f21",
+"bounds": [
+0
+],
+"instrument": "GAO",
+"mission_phase": "first_light",
+"usersceneassignmentstatus_set": [
+{}
+],
+"plume_count": 0,
+"deleted_plume_count": 0,
+"hidden_plume_count": 0,
+"published_plume_count": 0,
+"is_quick_view": true,
+"name": "string",
+"timestamp": "2019-08-24T14:15:22Z",
+"is_quick_look": false
+}
+Scenes Download Internal
+Authorizations:
+ScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Scene Name Search)
+Filter results for scene names containing the provided value.
+
+hasAssignees	
+boolean (Has Assignees)
+Scene has been assigned for assessment by a Post-Emission Quality Control team member.
+
+assignees	
+Array of integers (Assignees)
+Filter for scenes assigned to users with the provided IDs.
+
+assignment_status	
+string (Assignment Status)
+Enum: "To Do" "In Progress" "Done" "Failed" "Deleted"
+assessment_status	
+string (Assessment Status)
+Default: "exclude-do-not-assess"
+Enum: "assessed" "not-assessed" "do-not-assess" "exclude-do-not-assess"
+assignment_modified_datetime	
+string (Assignment Modified Datetime)
+Examples: assignment_modified_datetime=2018-02-12T23:20:50Z assignment_modified_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z assignment_modified_datetime=2018-02-12T00:00:00Z/.. assignment_modified_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+plume_quality	
+string (Plume Quality)
+Enum: "any" "good" "questionable" "bad"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+number (Cloud Cover Pct Min)
+cloud_cover_pct_max	
+number (Cloud Cover Pct Max)
+assessment_cloud_cover_pct	
+integer (Assessment Cloud Cover Pct)
+Enum: 0 25 50 75 100
+has_plume_emissions	
+boolean (Has Plume Emissions)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_statuses	
+Array of strings (Plume Statuses)
+Items Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+is_quick_look	
+boolean (Is Quick Look)
+Deprecated
+Orthorectified preliminary maps of individual atmospheric CH4 and CO2 enhancements (segmented plumes). Otherwise known as “Quick Look” products with:
+
+plume image
+acquisition date & UTC time
+latitude and longitude of plume origin
+initial IME, emission rate, and plume length estimates
+label	
+string (Label)
+Enum: "QL" "QV"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+Responses
+200 OK
+
+get
+/api/v1/catalog/download-scenes
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/download-scenes",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox": [
+0,
+0,
+0,
+0
+],
+"type": "FeatureCollection",
+"features": [
+{}
+]
+}
+Scenes Download Gpkg
+Authorizations:
+TokenUserScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+names	
+Array of strings (Scene Names)
+Examples: names=GAO20230628t190435p0000&names=GAO20230628t185900p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+integer (Minimum Cloud Cover Percentage)
+cloud_cover_pct_max	
+integer (Maximum Cloud Cover Percentage)
+not_cloudy	
+boolean (Not Cloudy)
+Cloud cover percentage <= 25%.
+
+published_plume_count_min	
+integer (Minimum Published Plume Count)
+published_plume_count_max	
+integer (Maximum Published Plume Count)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+intersects	
+any (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+gadm_composite_id	
+string (GADM Composite ID)
+aoi_id	
+string <uuid> (Area of Interest ID)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+limit	
+integer (Limit)
+Default: 1000
+offset	
+integer (Offset)
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/catalog/download/scenes.gpkg
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/download/scenes.gpkg",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Scenes Download Geojson
+Authorizations:
+TokenUserScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+names	
+Array of strings (Scene Names)
+Examples: names=GAO20230628t190435p0000&names=GAO20230628t185900p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+integer (Minimum Cloud Cover Percentage)
+cloud_cover_pct_max	
+integer (Maximum Cloud Cover Percentage)
+not_cloudy	
+boolean (Not Cloudy)
+Cloud cover percentage <= 25%.
+
+published_plume_count_min	
+integer (Minimum Published Plume Count)
+published_plume_count_max	
+integer (Maximum Published Plume Count)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+intersects	
+any (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+gadm_composite_id	
+string (GADM Composite ID)
+aoi_id	
+string <uuid> (Area of Interest ID)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+limit	
+integer (Limit)
+Default: 1000
+offset	
+integer (Offset)
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/catalog/download/scenes.geojson
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/download/scenes.geojson",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Scenes Download Gml
+Authorizations:
+TokenUserScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+names	
+Array of strings (Scene Names)
+Examples: names=GAO20230628t190435p0000&names=GAO20230628t185900p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+integer (Minimum Cloud Cover Percentage)
+cloud_cover_pct_max	
+integer (Maximum Cloud Cover Percentage)
+not_cloudy	
+boolean (Not Cloudy)
+Cloud cover percentage <= 25%.
+
+published_plume_count_min	
+integer (Minimum Published Plume Count)
+published_plume_count_max	
+integer (Maximum Published Plume Count)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+intersects	
+any (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+gadm_composite_id	
+string (GADM Composite ID)
+aoi_id	
+string <uuid> (Area of Interest ID)
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "priority"
+limit	
+integer (Limit)
+Default: 1000
+offset	
+integer (Offset)
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/catalog/download/scenes.gml
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/download/scenes.gml",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Mql Scene Count
+Authorizations:
+ScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/catalog/mql-scene-count
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/mql-scene-count",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+0
+0
+Can Complete Scene
+Authorizations:
+ScopedAuth
+path Parameters
+scene_id
+required
+string (Scene Id)
+Responses
+200 OK
+
+get
+/api/v1/catalog/can-complete-scene/{scene_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+true
+Scene Count
+Authorizations:
+ScopedAuth
+query Parameters
+ids	
+Array of strings <uuid> (Scene IDs)
+Examples: ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Scene Name Search)
+Filter results for scene names containing the provided value.
+
+hasAssignees	
+boolean (Has Assignees)
+Scene has been assigned for assessment by a Post-Emission Quality Control team member.
+
+assignees	
+Array of integers (Assignees)
+Filter for scenes assigned to users with the provided IDs.
+
+assignment_status	
+string (Assignment Status)
+Enum: "To Do" "In Progress" "Done" "Failed" "Deleted"
+assessment_status	
+string (Assessment Status)
+Default: "exclude-do-not-assess"
+Enum: "assessed" "not-assessed" "do-not-assess" "exclude-do-not-assess"
+assignment_modified_datetime	
+string (Assignment Modified Datetime)
+Examples: assignment_modified_datetime=2018-02-12T23:20:50Z assignment_modified_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z assignment_modified_datetime=2018-02-12T00:00:00Z/.. assignment_modified_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+plume_quality	
+string (Plume Quality)
+Enum: "any" "good" "questionable" "bad"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+Three character abbreviations for sensor (e.g., ang (AVIRIS-NG), av3, (AVIRIS-3), emi (EMIT), tan (Tanager)
+
+cloud_cover_pct_min	
+number (Cloud Cover Pct Min)
+cloud_cover_pct_max	
+number (Cloud Cover Pct Max)
+assessment_cloud_cover_pct	
+integer (Assessment Cloud Cover Pct)
+Enum: 0 25 50 75 100
+has_plume_emissions	
+boolean (Has Plume Emissions)
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+plume_emission_min	
+integer (Plume Emission Min)
+kg/hr
+
+plume_emission_max	
+integer (Plume Emission Max)
+kg/hr
+
+plume_statuses	
+Array of strings (Plume Statuses)
+Items Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+plume_sectors	
+Array of strings (Plume Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+is_quick_look	
+boolean (Is Quick Look)
+Deprecated
+Orthorectified preliminary maps of individual atmospheric CH4 and CO2 enhancements (segmented plumes). Otherwise known as “Quick Look” products with:
+
+plume image
+acquisition date & UTC time
+latitude and longitude of plume origin
+initial IME, emission rate, and plume length estimates
+label	
+string (Label)
+Enum: "QL" "QV"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+published_at	
+string (Published At)
+Examples: published_at=2018-02-12T23:20:50Z published_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at=2018-02-12T00:00:00Z/.. published_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+created_at	
+string (Created At)
+Examples: created_at=2018-02-12T23:20:50Z created_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z created_at=2018-02-12T00:00:00Z/.. created_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+Responses
+200 OK
+
+get
+/api/v1/catalog/scene-count
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/scene-count",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+0
+0
+Get GeoJSON of all plume sources using DBSCAN algorithm.
+This endpoint generates spatial clusters over plumes filtered via same parameters as those used for the plume-csv and plumes/related endpoints.
+
+Core space/time parameters:
+
+datetime: datetime interval, ex: "2018-02-12T00:00:00Z/2018-03-18T12:31:12Z"
+bbox: The bounding box is a 4-tuple (xmin, ymin, xmax, ymax) representing the coordinates. It's formatted with individual parameters for the longitude and latitude of the lower left corner followed by the upper right corner. For example: bbox=-109.04&bbox=31.33&bbox=-103.01&bbox=37.01
+Additional key parameters used for DBSCAN algorithm are:
+
+eps: [epsilon] minimal distance between points in meters
+minpoints: minimal number of points required to make a cluster
+source: https://postgis.net/docs/ST_ClusterDBSCAN.html
+
+For other plume filter parameters to PlumeFilterSchema in Schemas section below.
+
+Authorizations:
+OptionalAuth
+query Parameters
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+minpoints	
+integer (Minpoints)
+Default: 1
+eps	
+Eps (integer) or Eps (null) (Eps)
+Responses
+200 OK
+
+get
+/api/v1/catalog/sources.geojson
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/sources.geojson",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox": [
+0,
+0,
+0,
+0
+],
+"type": "FeatureCollection",
+"features": [
+{}
+]
+}
+Get sources summary aggregations by sector.
+Authorizations:
+OptionalAuth
+query Parameters
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+eps	
+integer (Eps)
+Default: 100
+minpoints	
+integer (Minpoints)
+Default: 1
+Responses
+200 OK
+
+get
+/api/v1/catalog/sources/aggregate
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/sources/aggregate",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+[
+{
+"persistence_avg": 1,
+"emission_sum": 0,
+"emission_uncertainty_sum": 0,
+"emission_avg": 0,
+"emission_uncertainty_avg": 0,
+"emission_std": 0,
+"emission_uncertainty_std": 0,
+"plume_count": 0,
+"single_plume_count": 0,
+"sector": "string"
+}
+]
+Get plume source data by Plume UUID
+Authorizations:
+OptionalAuth
+path Parameters
+plume_uuid
+required
+string (Plume Uuid)
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+eps	
+Eps (integer) or Eps (null) (Eps)
+minpoints	
+integer (Minpoints)
+Default: 1
+explain	
+boolean (Explain)
+Default: false
+Responses
+200 OK
+404 Not Found
+
+get
+/api/v1/catalog/source/plume/{plume_uuid}
+Response samples
+200404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"plumes": [
+{}
+],
+"scenes": [
+{}
+],
+"point": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"source_name": "string",
+"source": { },
+"observation_dates": [
+"string"
+],
+"detection_dates": [
+"string"
+],
+"explanation": {
+"source_name": "string",
+"gas": "string",
+"sector": "string",
+"summary": {},
+"daily_breakdown": [],
+"detection_dates": [],
+"calculation_details": {}
+}
+}
+Get plume source data by Plume name, ie GAO1999010101t123456-A
+Authorizations:
+OptionalAuth
+path Parameters
+plume_id
+required
+string (Plume Id)
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+eps	
+integer (Eps)
+Default: 100
+minpoints	
+integer (Minpoints)
+Default: 1
+explain	
+boolean (Explain)
+Default: false
+Responses
+200 OK
+404 Not Found
+
+get
+/api/v1/catalog/source/plume/name/{plume_id}
+Response samples
+200404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"plumes": [
+{}
+],
+"scenes": [
+{}
+],
+"point": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"source_name": "string",
+"source": { },
+"observation_dates": [
+"string"
+],
+"detection_dates": [
+"string"
+],
+"explanation": {
+"source_name": "string",
+"gas": "string",
+"sector": "string",
+"summary": {},
+"daily_breakdown": [],
+"detection_dates": [],
+"calculation_details": {}
+}
+}
+Get source data by source_name. Returns 404 if exact match of source_name in latest sources is not found. See /sources/search/{source_name} for finding the closest source to the source_name
+Used by 2.0 Portal a lot. Called for each source and usually with date queries.
+
+Authorizations:
+OptionalAuth
+path Parameters
+gas
+required
+string (Gas)
+Enum: "CO2" "CH4"
+sector
+required
+Sector (string) or "NA" (string) (Sector)
+eps
+required
+integer (Eps)
+lon
+required
+string (Lon)
+lat
+required
+string (Lat)
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+minpoints	
+integer (Minpoints)
+Default: 1
+explain	
+boolean (Explain)
+Default: false
+Responses
+200 OK
+
+get
+/api/v1/catalog/source/{gas}_{sector}_{eps}m_{lon}_{lat}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"plumes": [
+{}
+],
+"scenes": [
+{}
+],
+"point": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"source_name": "string",
+"source": { },
+"observation_dates": [
+"string"
+],
+"detection_dates": [
+"string"
+],
+"explanation": {
+"source_name": "string",
+"gas": "string",
+"sector": "string",
+"summary": {},
+"daily_breakdown": [],
+"detection_dates": [],
+"calculation_details": {}
+}
+}
+Get plume source data by 'source_name' attribute of a source.
+Authorizations:
+OptionalAuth
+path Parameters
+gas
+required
+string (Gas)
+Enum: "CO2" "CH4"
+sector
+required
+Sector (string) or "NA" (string) (Sector)
+eps
+required
+integer (Eps)
+lon
+required
+string (Lon)
+lat
+required
+string (Lat)
+query Parameters
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+minpoints	
+integer (Minpoints)
+Default: 1
+explain	
+boolean (Explain)
+Default: false
+Responses
+200 OK
+
+get
+/api/v1/catalog/search/source/{gas}_{sector}_{eps}m_{lon}_{lat}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"plumes": [
+{}
+],
+"scenes": [
+{}
+],
+"point": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"source_name": "string",
+"source": { },
+"observation_dates": [
+"string"
+],
+"detection_dates": [
+"string"
+],
+"explanation": {
+"source_name": "string",
+"gas": "string",
+"sector": "string",
+"summary": {},
+"daily_breakdown": [],
+"detection_dates": [],
+"calculation_details": {}
+}
+}
+Get plumes related to a source by 'source_name' attribute of a source.
+Authorizations:
+OptionalAuth
+path Parameters
+gas
+required
+string (Gas)
+Enum: "CO2" "CH4"
+sector
+required
+Sector (string) or "NA" (string) (Sector)
+eps
+required
+integer (Eps)
+lon
+required
+string (Lon)
+lat
+required
+string (Lat)
+query Parameters
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+minpoints	
+integer (Minpoints)
+Default: 1
+sort	
+string (Sort)
+Default: "desc"
+Enum: "asc" "desc" "emissions_desc" "emissions_asc"
+offset	
+integer (Offset)
+Default: 0
+limit	
+Limit (integer) or Limit (null) (Limit)
+Responses
+200 OK
+
+get
+/api/v1/catalog/source-plumes-csv/{gas}_{sector}_{eps}m_{lon}_{lat}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"plumes": [
+{}
+],
+"scenes": [
+{}
+],
+"point": {
+"bbox": [],
+"type": "Point",
+"coordinates": []
+},
+"source_name": "string",
+"source": { },
+"observation_dates": [
+"string"
+],
+"detection_dates": [
+"string"
+],
+"explanation": {
+"source_name": "string",
+"gas": "string",
+"sector": "string",
+"summary": {},
+"daily_breakdown": [],
+"detection_dates": [],
+"calculation_details": {}
+}
+}
+Download a CSV of all plume sources using DBSCAN algorithm.
+Authorizations:
+OptionalAuth
+query Parameters
+bbox	
+Array of items (Bounding Box) = 4 items
+Examples: bbox=-109.04&bbox=-31.33&bbox=-103.01&bbox=37.01
+The area of interest bounding box defined by two latitudes and two longitudes. The order of values should be left longitude, bottom latitude, right longitude, top latitude.
+
+plume_ids	
+Array of strings <uuid> (Plume IDs)
+Universally unique object identifier randomly generated using UUIDv4
+
+plume_names	
+Array of strings (Plume Names)
+Examples: plume_names=GAO20230628t191011p0000-B&plume_names=GAO20230628t190435p0000-C
+A unique identifier for each plume in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000-A') retains key information from the original radiance filename and indicates the order of multiple plumes detected in the same image.
+
+scene_name	
+string (Scene Name)
+Examples: scene_name=GAO20230628t190435p0000
+A unique identifier for each scene in the format {platform}{YYYYMMDD}t{HHMMSS}p{part}. The first three characters represent the platform (e.g., GAO for Global Airborne Observatory), followed by the acquisition date and time in ISO 8601 UTC format. The part suffix (e.g., 'p0000') retains key information from the original radiance filename.
+
+scene_id	
+string <uuid> (Scene ID)
+Examples: scene_id=47ac573b-504e-44c4-a998-0f3c19fa0f21
+Universally unique object identifier randomly generated using UUIDv4
+
+scene_ids	
+Array of strings <uuid> (Scene IDs)
+Examples: scene_ids=a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb&scene_ids=16763aed-7933-4067-a1dc-ad078c9899bd
+Universally unique object identifier randomly generated using UUIDv4
+
+search	
+string (Plume Name Search)
+Filter results for plume names containing the provided value.
+
+emission_min	
+integer (Emission Min)
+kg/hr
+
+emission_max	
+integer (Emission Max)
+kg/hr
+
+sectors	
+Array of strings (Sectors)
+Items Enum: "1B2" "6A" "6B" "4B" "1B1a" "1A1" "other" "NULL" "NA"
+plume_gas	
+string (Plume Gas)
+Enum: "CO2" "CH4"
+instrument	
+string (Instrument)
+Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+instruments	
+Array of strings (Instruments)
+Items Enum: "GAO" "ang" "av3" "emi" "tan" "ssc"
+qualities	
+Array of strings (Qualities)
+Items Enum: "good" "questionable" "bad"
+intersects	
+string (Intersects)
+Examples: coordinates=-119.08930932022109,35.49648630200113&type=Point
+A GeoJSON encoded geographic feature's 'geometry' value representing a Point.
+
+has_phme	
+boolean (Has PHME)
+Filter for results that contain a Potentially Harmful Methane Event. PHME is an experimental product defined as a methane emissions event whose resulting surface-level concentrations exceed at least one safety or health-based concentration threshold:
+
+Proximity-only: plume origin is within 100m of the nearest identifiable sensitive receptor (any potentially human-occupied building) which addresses smallest detectable plumes close to people, OR
+Size and proximity: observed plume length exceeds 1000 meters AND overlaps nearest identifiable sensitive receptor – which indicates a reasonably high emission event and potential for surface mixing ratios exceeding a certain lower explosive limit (LEL) within proximity to people
+published_at_datetime	
+string (Published At Datetime)
+Examples: published_at_datetime=2018-02-12T23:20:50Z published_at_datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z published_at_datetime=2018-02-12T00:00:00Z/.. published_at_datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+aoi_id	
+string <uuid> (Area of Interest ID)
+collection_version_l3	
+string (Collection Version L3)
+collection_version_l4	
+string (Collection Version L4)
+gadm_composite_id	
+string (GADM Composite ID)
+modified_at	
+string (Modified At)
+Examples: modified_at=2018-02-12T23:20:50Z modified_at=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z modified_at=2018-02-12T00:00:00Z/.. modified_at=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+datetime	
+string (Datetime)
+Examples: datetime=2018-02-12T23:20:50Z datetime=2018-02-12T00:00:00Z/2018-03-18T12:31:12Z datetime=2018-02-12T00:00:00Z/.. datetime=../2018-03-18T12:31:12Z
+The date/time or date/time range by which to filter results. The start and end date/times should be separated by a forward slash. Date/times must be formatted according to RFC 3339. Refer to the STAC specification for additional information.
+
+Date/times can be represented as dates, date/times, closed intervals, and open intervals.
+
+source_name	
+string (Source Name)
+Examples: source_name=CH4_6A_100m_-74.00656_40.71283 source_name=CH4_1A1_100m_-122.24458_38.04280
+A source name describes an ephemeral geospatial point around which plumes of the same gas and sector are historically clustered. Clusters are defined using the ST_ClusterDBSCAN function. A source can be defined by a minimum of one core plume, and border plumes can only be matched within a 2km box bounding the core plume. Source names are formatted as <gas>_<sector>_<eps>_<longitude>_<latitude>. See ST_ClusterDBSCAN documentation for information about how eps (epsilon, the maximal distance from the core plume for another plume to qualify as a bordering geometry) is used.
+
+status	
+string (Status)
+Default: "not_deleted"
+Enum: "not_deleted" "published" "publish_ready" "publish_delayed" "valid" "deleted" "hidden" "all"
+eps	
+Eps (integer) or Eps (null) (Eps)
+minpoints	
+integer (Minpoints)
+Default: 1
+Responses
+200 OK
+
+get
+/api/v1/catalog/sources-csv
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/catalog/sources-csv",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Plume Picker
+Assignments
+Authorizations:
+ScopedAuth
+query Parameters
+assigner_id	
+string (Assigner Id)
+assignee_id	
+string (Assignee Id)
+assignment_status	
+Assignment Status (string) or Assignment Status (null) (Assignment Status)
+scene_search	
+Scene Search (string) or Scene Search (null) (Scene Search)
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/picker/assignments
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/picker/assignments",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Assignment Create
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+assignees
+required
+Array of integers (Assignees) non-empty
+scenes
+required
+Array of strings <uuid> (Scene IDs) non-empty
+Universally unique object identifier randomly generated using UUIDv4
+
+user_id	
+User (integer) or User (null) (User)
+note	
+Note (string) or Note (null) (Note)
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+422 Unprocessable Entity
+
+post
+/api/v1/picker/assignment
+Request samples
+PayloadPython
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"assignees": [
+0,
+1
+],
+"scenes": [
+"a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb",
+"16763aed-7933-4067-a1dc-ad078c9899bd"
+],
+"user_id": 0,
+"note": "string"
+}
+Response samples
+200400401422
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": 0,
+"user": {
+"label": "string",
+"groups": {},
+"organizations": [],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+},
+"assignees": [
+{}
+],
+"usersceneassignmentstatus_set": [
+{}
+],
+"status": "To Do",
+"created": "2019-08-24T14:15:22Z",
+"note": "string",
+"scenes": [
+"string"
+]
+}
+Assignment
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+Responses
+200 OK
+
+get
+/api/v1/picker/assignment/{pk}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": 0,
+"user": {
+"label": "string",
+"groups": {},
+"organizations": [],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+},
+"assignees": [
+{}
+],
+"usersceneassignmentstatus_set": [
+{}
+],
+"status": "To Do",
+"created": "2019-08-24T14:15:22Z",
+"note": "string",
+"scenes": [
+"string"
+]
+}
+Modify Assignment
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+integer (Pk)
+Request Body schema: application/json
+assignees
+required
+Array of integers (Assignees) non-empty
+scenes
+required
+Array of strings <uuid> (Scene IDs) non-empty
+Universally unique object identifier randomly generated using UUIDv4
+
+user_id	
+User (integer) or User (null) (User)
+note	
+Note (string) or Note (null) (Note)
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+422 Unprocessable Entity
+
+put
+/api/v1/picker/assignment/{pk}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"assignees": [
+0,
+1
+],
+"scenes": [
+"a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb",
+"16763aed-7933-4067-a1dc-ad078c9899bd"
+],
+"user_id": 0,
+"note": "string"
+}
+Response samples
+200400401422
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": 0,
+"user": {
+"label": "string",
+"groups": {},
+"organizations": [],
+"id": 0,
+"email": "string",
+"first_name": "string",
+"last_name": "string",
+"industry": "string",
+"organization": "string",
+"title": "string",
+"usage": "string",
+"date_joined": "2019-08-24T14:15:22Z",
+"is_staff": false,
+"is_superuser": false
+},
+"assignees": [
+{}
+],
+"usersceneassignmentstatus_set": [
+{}
+],
+"status": "To Do",
+"created": "2019-08-24T14:15:22Z",
+"note": "string",
+"scenes": [
+"string"
+]
+}
+Delete Assignment
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+integer (Pk)
+Responses
+200 OK
+
+delete
+/api/v1/picker/assignment/{pk}
+Response samples
+200
+Content type
+application/json
+
+Copy
+true
+Scene Assessment
+Authorizations:
+ScopedAuth
+path Parameters
+scene_id
+required
+string (Scene Id)
+Responses
+200 OK
+
+get
+/api/v1/picker/{scene_id}/scene-assessment
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": 0,
+"user": 0,
+"image_artifacts": { },
+"low_snr": false,
+"geolocation_error": true,
+"atmospheric_artifacts": { },
+"cloud_cover_pct": 0,
+"note": "string"
+}
+Scene Assessment Create
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+scene_assessment_status_id	
+Scene Assessment Status Id (integer) or Scene Assessment Status Id (null) (Scene Assessment Status Id)
+scene_id
+required
+string (Scene Id)
+image_artifacts	
+object (Image Artifacts)
+low_snr	
+Low Snr (boolean) or Low Snr (null) (Low Snr)
+Default: false
+geolocation_error	
+Geolocation Error (boolean) or Geolocation Error (null) (Geolocation Error)
+atmospheric_artifacts	
+object (Atmospheric Artifacts)
+note	
+Note (string) or Note (null) (Note)
+cloud_cover_pct	
+Cloud Cover % (integer) or Cloud Cover % (null) (Cloud Cover %)
+Responses
+200 OK
+
+put
+/api/v1/picker/scene-assessment
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"scene_assessment_status_id": 0,
+"scene_id": "string",
+"image_artifacts": { },
+"low_snr": false,
+"geolocation_error": true,
+"atmospheric_artifacts": { },
+"note": "string",
+"cloud_cover_pct": 0
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": 0,
+"user": 0,
+"image_artifacts": { },
+"low_snr": false,
+"geolocation_error": true,
+"atmospheric_artifacts": { },
+"cloud_cover_pct": 0,
+"note": "string"
+}
+Scene Assessment Status Update
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+Request Body schema: application/json
+status
+required
+string (Status)
+Enum: "To Do" "In Progress" "Done" "Failed" "Deleted"
+Responses
+200 OK
+
+put
+/api/v1/picker/scene-assessment-status/{pk}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"status": "To Do"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"pk": 0,
+"user": {
+"label": "string",
+"email": "string",
+"id": 0
+},
+"scene_id": "861eef56-1159-4a95-802f-abab2d0cc192",
+"scene": {
+"name": "string"
+},
+"assignment": {
+"id": 0,
+"note": "string",
+"status": "string"
+},
+"note": "string",
+"status": "string",
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Geospatial Services
+Plumes Tile Uncached
+Authorizations:
+ScopedAuth
+path Parameters
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+
+get
+/api/v1/layers/plumes/uncached/{z}/{x}/{y}.mvt
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Mapnik Vector Tile endpoint for plume points.
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+
+get
+/api/v1/layers/plumes/{z}/{x}/{y}.mvt
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Scenes Tile Scale Uncached
+Authorizations:
+ScopedAuth
+path Parameters
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+
+get
+/api/v1/layers/scenes/uncached/{z}/{x}/{y}.mvt
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Vector tiles for scenes that have undergone plume detection.
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+
+get
+/api/v1/layers/scenes/{z}/{x}/{y}.mvt
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Layer Tile
+Authorizations:
+ScopedAuth
+path Parameters
+name
+required
+string (Name) ^[a-zA-Z0-9-_]+$
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+404 Not Found
+
+get
+/api/v1/layers/{name}/{z}/{x}/{y}.mvt
+Response samples
+200404
+Content type
+application/json
+
+Copy
+"string"
+XYZ Tile endpoint for scene gas concentration or RGB.
+Authorizations:
+OptionalAuth
+path Parameters
+scene_id
+required
+string (Scene Id)
+product
+required
+string (Product)
+Enum: "co2" "ch4" "rgb"
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+scale
+required
+integer (Scale)
+Responses
+200 OK
+
+get
+/api/v1/layers/scene/{scene_id}/{product}/{z}/{x}/{y}@{scale}x.png
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+XYZ Tile endpoint for scene gas concentration or RGB.
+Authorizations:
+OptionalAuth
+path Parameters
+scene_id
+required
+string (Scene Id)
+product
+required
+string (Product)
+Enum: "co2" "ch4" "rgb"
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+Responses
+200 OK
+
+get
+/api/v1/layers/scene/{scene_id}/{product}/{z}/{x}/{y}.png
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+Asset Tile Scale
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+scale
+required
+integer (Scale)
+query Parameters
+colormap	
+string (Colormap)
+Default: "gray"
+Enum: "gray" "turbo" "viridis" "magma" "turbo_r" "viridis_r" "magma_r"
+v_max	
+V Max (integer) or V Max (null) (V Max)
+Responses
+200 OK
+
+get
+/api/v1/layers/asset/{pk}/{z}/{x}/{y}@{scale}x.png
+Asset Pk Tile
+Authorizations:
+ScopedAuth
+path Parameters
+pk
+required
+string (Pk)
+z
+required
+integer (Z)
+x
+required
+integer (X)
+y
+required
+integer (Y)
+query Parameters
+scale	
+integer (Scale)
+Default: 1
+colormap	
+string (Colormap)
+Default: "gray"
+Enum: "gray" "turbo" "viridis" "magma" "turbo_r" "viridis_r" "magma_r"
+v_max	
+V Max (integer) or V Max (null) (V Max)
+Responses
+200 OK
+
+get
+/api/v1/layers/asset/{pk}/{z}/{x}/{y}.png
+Get Layer List
+Authorizations:
+ScopedAuth
+query Parameters
+statuses	
+Array of integers (Statuses)
+Default: [0]
+List of statuses for the layers
+
+organization	
+string (Organization)
+Filter layers by organization name
+
+user	
+integer (User)
+Filter by user ID
+
+has_organization	
+boolean (Has Organization)
+Filter layers by whether they have an organization association.
+
+my_organization	
+boolean (My Organization)
+Filter layers to organizations requesting user is associated with
+
+names	
+Array of strings (Names)
+Filter by layer name
+
+metadata	
+Metadata (object) or Metadata (string) (Metadata)
+Filter by key-value pairs in the metadata JSON field.Provide as JSON string, e.g., '{"key":"value"}'
+
+metadata_exclude	
+Metadata Exclude (object) or Metadata Exclude (string) (Metadata Exclude)
+Exclude by key-value pairs in the metadata JSON field.Provide as JSON string, e.g., '{"key":"value"}'
+
+search	
+string (Search)
+Filter by text search. Finds layers with name, verbose_name, and description matching the search text.
+
+Responses
+200 OK
+
+get
+/api/v1/layers/layers
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/layers/layers",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+[
+{
+"feature_count": 0,
+"organization": {},
+"user": {},
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"description": "string",
+"status": 1,
+"schema": { },
+"bounds": [],
+"metadata": { },
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+]
+Create a Layer using a file upload. Use multipart/form-data.
+Authorizations:
+ScopedAuth
+Request Body schema: multipart/form-data
+name
+required
+string (Name)
+A unique name for each layer. The name must be between 6 and 512 characters in length, inclusive.
+
+organization	
+string (Organization)
+verbose_name	
+Verbose Name (string) or Verbose Name (null) (Verbose Name)
+description	
+Description (string) or Description (null) (Description)
+file
+required
+string <binary> (File)
+Responses
+200 OK
+
+post
+/api/v1/layers/layer/form
+Request samples
+Python
+
+Copy
+import requests
+
+data = {
+    "name": "example_layer_geojson",
+    # Include other (not required) fields here
+}
+access_token = "<your_access_token>"
+file_path = "<path_to_source_file>"
+
+with open(file_path, "rb") as file:
+    response = requests.post(
+        "https://api.carbonmapper.org/api/v1/layers/layer/form",
+        data=data,
+        files={"file": file},
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"feature_count": 0,
+"organization": {
+"name": "string",
+"verbose_name": "string"
+},
+"user": {
+"label": "string",
+"first_name": "string",
+"last_name": "string",
+"email": "string",
+"id": 0
+},
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"description": "string",
+"status": 1,
+"schema": { },
+"bounds": [
+null
+],
+"metadata": { },
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Create a Grid Layer from existing layers
+Generates a new layer containing grid points that intersect a given set of source layers.
+
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+layer_ids
+required
+Array of integers (Layer Ids)
+List of source Layer IDs to use for grid creation.
+
+buffer_distance	
+integer (Buffer Distance)
+Optional: Buffer distance in meters for intersection checks.
+
+update_properties	
+object (Update Properties)
+Optional: Dictionary of properties to add/override in the grid features.
+
+Responses
+201 Created
+
+post
+/api/v1/layers/layers/grid
+Request samples
+PayloadPython
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"layer_ids": [
+[],
+[]
+],
+"buffer_distance": 0,
+"update_properties": { }
+}
+Response samples
+201
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"feature_count": 0,
+"organization": {
+"name": "string",
+"verbose_name": "string"
+},
+"user": {
+"label": "string",
+"first_name": "string",
+"last_name": "string",
+"email": "string",
+"id": 0
+},
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"description": "string",
+"status": 1,
+"schema": { },
+"bounds": [
+null
+],
+"metadata": { },
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Check Name Available
+Layer names are unique, check if a layer name is available.
+
+Authorizations:
+ScopedAuth
+query Parameters
+name
+required
+string (Name)
+Responses
+200 OK
+
+get
+/api/v1/layers/layer/name-available
+Response samples
+200
+Content type
+application/json
+
+Copy
+true
+Update a Layer. Use multipart/form-data.
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+Examples: 0 1
+A unique identifier for each layer.
+
+Request Body schema: multipart/form-data
+name
+required
+string (Name)
+A unique name for each layer. The name must be between 6 and 512 characters in length, inclusive.
+
+organization	
+string (Organization)
+verbose_name	
+Verbose Name (string) or Verbose Name (null) (Verbose Name)
+description	
+Description (string) or Description (null) (Description)
+file	
+string <binary> (File)
+Responses
+200 OK
+
+post
+/api/v1/layers/layer/{layer_id}/form
+Request samples
+Python
+
+Copy
+import requests
+
+data = {
+    "name": "example_layer_geojson",
+    # Include other (not required) fields here
+}
+access_token = "<your_access_token>"
+response = requests.post(
+    "https://api.carbonmapper.org/api/v1/layers/layer/0/form",
+    json=data,
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"feature_count": 0,
+"organization": {
+"name": "string",
+"verbose_name": "string"
+},
+"user": {
+"label": "string",
+"first_name": "string",
+"last_name": "string",
+"email": "string",
+"id": 0
+},
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"description": "string",
+"status": 1,
+"schema": { },
+"bounds": [
+null
+],
+"metadata": { },
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Get Layer
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+Responses
+200 OK
+
+get
+/api/v1/layers/layer/{layer_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"feature_count": 0,
+"organization": {
+"name": "string",
+"verbose_name": "string"
+},
+"user": {
+"label": "string",
+"first_name": "string",
+"last_name": "string",
+"email": "string",
+"id": 0
+},
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"description": "string",
+"status": 1,
+"schema": { },
+"bounds": [
+null
+],
+"metadata": { },
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Delete a Layer
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+Responses
+204 No Content
+404 Not Found
+
+delete
+/api/v1/layers/layer/{layer_id}
+Response samples
+404
+Content type
+application/json
+
+Copy
+"string"
+Get paginated features for a specific layer
+Get paginated features for a specific layer.
+
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+query Parameters
+ids	
+Array of integers (Ids)
+Default: []
+property_filter	
+Property Filter (string) or Property Filter (null) (Property Filter)
+limit	
+integer (Limit)
+Default: 10
+offset	
+integer (Offset)
+Default: 0
+bbox	
+Array of Bbox (items) or Bbox (null) (Bbox)
+Responses
+200 OK
+
+get
+/api/v1/layers/layer/{layer_id}/features
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox_count": 0,
+"total_count": 0,
+"limit": 0,
+"offset": 0,
+"items": [
+{}
+]
+}
+List user owned uploaded Layer Files
+Get a list of all layer files associated with layers accessible by the current user, ordered by most recent.
+
+Authorizations:
+ScopedAuth
+query Parameters
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/layers/files
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/layers/files",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Download Layer
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+query Parameters
+format	
+string (VectorFormat)
+Default: "geojson"
+Enum: "shp" "geojson" "gpkg" "gml"
+Responses
+200 OK
+
+get
+/api/v1/layers/layer/{layer_id}/download
+Response samples
+200
+Content type
+application/json
+
+Copy
+"string"
+List Files for a Specific Layer
+Get a list of layer files for a specific layer, if accessible by the current user.
+
+Authorizations:
+ScopedAuth
+path Parameters
+layer_id
+required
+integer (Layer Id)
+query Parameters
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/layers/layer/{layer_id}/files
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Get Layer File Details
+Get details for a specific layer file, including a download URL, if accessible.
+
+Authorizations:
+ScopedAuth
+path Parameters
+file_id
+required
+integer (File Id)
+Responses
+200 OK
+
+get
+/api/v1/layers/file/{file_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"layer": {
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"bounds": []
+},
+"file_name": "string",
+"file_url": "string",
+"id": 0,
+"status": "string",
+"created": "2019-08-24T14:15:22Z",
+"modified": "2019-08-24T14:15:22Z"
+}
+Create an AOI using a json body payload. Use GeoJSON geometry only.
+Authorizations:
+ScopedAuth
+Request Body schema: application/json
+geometry_json
+required
+object (MultiPolygon)
+A GeoJSON encoded geographic feature's 'geometry' value representing a MultiPolygon.
+
+name	
+Name (string) or Name (null) (Name)
+description	
+Description (string) or Description (null) (Description)
+Responses
+200 OK
+
+post
+/api/v1/layers/aoi
+Request samples
+PayloadPython
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"geometry_json": {
+"bbox": [],
+"type": "MultiPolygon",
+"coordinates": []
+},
+"name": "string",
+"description": "string"
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08"
+}
+Create an AOI using a file upload. Use multipart/form-data.
+Authorizations:
+ScopedAuth
+Request Body schema: multipart/form-data
+name	
+Name (string) or Name (null) (Name)
+description	
+Description (string) or Description (null) (Description)
+file
+required
+string <binary> (File)
+Responses
+200 OK
+422 Unprocessable Entity
+
+post
+/api/v1/layers/aoi/form
+Request samples
+Python
+
+Copy
+import requests
+
+data = {
+    # Include other (not required) fields here
+}
+access_token = "<your_access_token>"
+file_path = "<path_to_source_file>"
+
+with open(file_path, "rb") as file:
+    response = requests.post(
+        "https://api.carbonmapper.org/api/v1/layers/aoi/form",
+        data=data,
+        files={"file": file},
+        headers={"Authorization": f"Bearer {access_token}"},
+    )
+Response samples
+200422
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08"
+}
+Aoi List
+Authorizations:
+ScopedAuth
+query Parameters
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/layers/aoi/list
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/layers/aoi/list",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}
+Aoi Get
+Authorizations:
+ScopedAuth
+path Parameters
+aoi_id
+required
+string (Aoi Id)
+Responses
+200 OK
+
+get
+/api/v1/layers/aoi/{aoi_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"geometry_json": {
+"bbox": [],
+"type": "MultiPolygon",
+"coordinates": []
+},
+"name": "string",
+"description": "string"
+}
+Get aoi geojson
+Authorizations:
+ScopedAuth
+path Parameters
+aoi_id
+required
+string (Aoi Id)
+Responses
+200 OK
+
+get
+/api/v1/layers/aoi/{aoi_id}/geojson
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox": [
+0,
+0,
+0,
+0
+],
+"type": "MultiPolygon",
+"coordinates": [
+[]
+]
+}
+STAC API
+Get Catalog
+Authorizations:
+TokenUserOptionalScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/stac/
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/stac/",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Search
+Authorizations:
+TokenUserOptionalScopedAuth
+query Parameters
+limit	
+integer (Limit)
+Default: 10
+bbox	
+Bbox (string) or Bbox (null) (Bbox)
+datetime	
+Datetime (string) or Datetime (null) (Datetime)
+created_daterange	
+Created Daterange (string) or Created Daterange (null) (Created Daterange)
+intersects	
+Intersects (string) or Intersects (null) (Intersects)
+ids	
+Array of Ids (strings) or Ids (null) (Ids)
+collections	
+Array of Collections (strings) or Collections (null) (Collections)
+cmf	
+Cmf (string) or Cmf (null) (Cmf)
+gas	
+Gas (string) or Gas (null) (Gas)
+instruments	
+Array of Instruments (strings) or Instruments (null) (Instruments)
+sector	
+Sector (string) or Sector (null) (Sector)
+version	
+Array of Version (strings) or Version (null) (Version)
+version_include_nulls	
+Version Include Nulls (boolean) or Version Include Nulls (null) (Version Include Nulls)
+Default: false
+query	
+Query (object) or Query (null) (Query)
+offset	
+integer (Offset)
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/stac/search
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/stac/search",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Post Search
+Authorizations:
+TokenUserOptionalScopedAuth
+query Parameters
+offset	
+integer (Offset)
+Default: 0
+Request Body schema: application/json
+limit	
+integer (Limit)
+Default: 10
+bbox	
+(Array of Bbox (integers or numbers)) or Bbox (null) (Bbox)
+datetime	
+Datetime (string) or Datetime (null) (Datetime)
+created_daterange	
+Created Daterange (string) or Created Daterange (null) (Created Daterange)
+intersects	
+Intersects (string) or Intersects (null) (Intersects)
+ids	
+Array of Ids (strings) or Ids (null) (Ids)
+collections	
+Array of Collections (strings) or Collections (null) (Collections)
+cmf	
+Cmf (string) or Cmf (null) (Cmf)
+gas	
+Gas (string) or Gas (null) (Gas)
+instruments	
+Array of Instruments (strings) or Instruments (null) (Instruments)
+sector	
+Sector (string) or Sector (null) (Sector)
+version	
+Array of Version (strings) or Version (null) (Version)
+version_include_nulls	
+Version Include Nulls (boolean) or Version Include Nulls (null) (Version Include Nulls)
+Default: false
+query	
+Query (object) or Query (null) (Query)
+Responses
+200 OK
+
+post
+/api/v1/stac/search
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"limit": 10,
+"bbox": [
+0
+],
+"datetime": "2018-02-12T23:20:50Z",
+"created_daterange": "2018-02-12T23:20:50Z",
+"intersects": "string",
+"ids": [
+"string"
+],
+"collections": [
+"string"
+],
+"cmf": "string",
+"gas": "string",
+"instruments": [
+"string"
+],
+"sector": "string",
+"version": [
+"string"
+],
+"version_include_nulls": false,
+"query": {
+"property1": {},
+"property2": {}
+}
+}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Collections
+Authorizations:
+TokenUserOptionalScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/stac/collections
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/stac/collections",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Collection
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+collection_id
+required
+string (Collection Id)
+Responses
+200 OK
+
+get
+/api/v1/stac/collections/{collection_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Items
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+collection_id
+required
+string (Collection Id)
+query Parameters
+limit	
+integer (Limit)
+Default: 10
+bbox	
+Bbox (string) or Bbox (null) (Bbox)
+datetime	
+Datetime (string) or Datetime (null) (Datetime)
+created_daterange	
+Created Daterange (string) or Created Daterange (null) (Created Daterange)
+intersects	
+Intersects (string) or Intersects (null) (Intersects)
+ids	
+Array of Ids (strings) or Ids (null) (Ids)
+collections	
+Array of Collections (strings) or Collections (null) (Collections)
+cmf	
+Cmf (string) or Cmf (null) (Cmf)
+gas	
+Gas (string) or Gas (null) (Gas)
+instruments	
+Array of Instruments (strings) or Instruments (null) (Instruments)
+sector	
+Sector (string) or Sector (null) (Sector)
+version	
+Array of Version (strings) or Version (null) (Version)
+version_include_nulls	
+Version Include Nulls (boolean) or Version Include Nulls (null) (Version Include Nulls)
+Default: false
+query	
+Query (object) or Query (null) (Query)
+offset	
+integer (Offset)
+Default: 0
+Responses
+200 OK
+
+get
+/api/v1/stac/collections/{collection_id}/items
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Feature
+Authorizations:
+TokenUserOptionalScopedAuth
+path Parameters
+collection_id
+required
+string (Collection Id)
+feature_id
+required
+string (Feature Id)
+Responses
+200 OK
+
+get
+/api/v1/stac/collections/{collection_id}/items/{feature_id}
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Get Conformance
+Authorizations:
+TokenUserOptionalScopedAuth
+Responses
+200 OK
+
+get
+/api/v1/stac/conformance
+Request samples
+Python
+
+Copy
+import requests
+
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/stac/conformance",
+)
+Response samples
+200
+Content type
+application/json
+
+Copy
+{ }
+Tasking
+Get Task Capture Rejection
+Authorizations:
+ScopedAuth
+path Parameters
+task_capture_id
+required
+string (Task Capture Id)
+Responses
+200 OK
+401 Unauthorized
+404 Not Found
+
+get
+/api/v1/tasking/task_capture/{task_capture_id}/rejection
+Response samples
+200401404
+Content type
+application/json
+
+Copy
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"created": "2019-08-24T14:15:22Z",
+"reason": "string",
+"description": "string",
+"notes": "string",
+"review": "21f83a7c-255e-42ed-9181-174cbadc4de5"
+}
+Patch Target Deck
+Authorizations:
+ScopedAuth
+path Parameters
+target_deck_id
+required
+string (Target Deck Id)
+Request Body schema: application/json
+replacement_method	
+ReplacementMethod (string) or null
+verbose_name	
+Verbose Name (string) or Verbose Name (null) (Verbose Name)
+status	
+string (Status) <= 20 characters
+Default: "DRAFT"
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+404 Not Found
+422 Unprocessable Entity
+
+patch
+/api/v1/tasking/target_deck/{target_deck_id}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+{
+"replacement_method": "FULL_REPLACEMENT",
+"verbose_name": "string",
+"status": "DRAFT"
+}
+Response samples
+200400401404422
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"status": "DRAFT",
+"target_specs": [
+{}
+],
+"verbose_name": "string",
+"organization": "string",
+"name": "string"
+}
+Get Target Deck
+Authorizations:
+ScopedAuth
+path Parameters
+target_deck_id
+required
+string (Target Deck Id)
+Responses
+200 OK
+401 Unauthorized
+404 Not Found
+
+get
+/api/v1/tasking/target_deck/{target_deck_id}
+Response samples
+200401404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"status": "DRAFT",
+"target_specs": [
+{}
+],
+"verbose_name": "string",
+"organization": "string",
+"name": "string",
+"permissions": [
+"string"
+]
+}
+Patch Target Spec
+Authorizations:
+ScopedAuth
+path Parameters
+target_spec_id
+required
+string (Target Spec Id)
+Request Body schema: application/json
+input_layers_names	
+Array of Input Layers Names (strings) or Input Layers Names (null) (Input Layers Names)
+name	
+Name (string) or Name (null) (Name)
+sensitivity_mode	
+Sensitivity Mode (string) or Sensitivity Mode (null) (Sensitivity Mode)
+off_nadir_angle_min	
+Off Nadir Angle Min (number) or Off Nadir Angle Min (null) (Off Nadir Angle Min)
+off_nadir_angle_max	
+Off Nadir Angle Max (number) or Off Nadir Angle Max (null) (Off Nadir Angle Max)
+satellite_elevation_angle_min	
+Satellite Elevation Angle Min (number) or Satellite Elevation Angle Min (null) (Satellite Elevation Angle Min)
+satellite_elevation_angle_max	
+Satellite Elevation Angle Max (number) or Satellite Elevation Angle Max (null) (Satellite Elevation Angle Max)
+solar_zenith_angle_min	
+Solar Zenith Angle Min (number) or Solar Zenith Angle Min (null) (Solar Zenith Angle Min)
+solar_zenith_angle_max	
+Solar Zenith Angle Max (number) or Solar Zenith Angle Max (null) (Solar Zenith Angle Max)
+start_time	
+Start Time (string) or Start Time (null) (Start Time)
+end_time	
+End Time (string) or End Time (null) (End Time)
+recurrence_frequency	
+Recurrence Frequency (string) or Recurrence Frequency (null) (Recurrence Frequency)
+recurrence_interval	
+Recurrence Interval (integer) or Recurrence Interval (null) (Recurrence Interval)
+count	
+Count (integer) or Count (null) (Count)
+priority	
+Priority (integer) or Priority (null) (Priority)
+Responses
+200 OK
+400 Bad Request
+401 Unauthorized
+404 Not Found
+422 Unprocessable Entity
+
+patch
+/api/v1/tasking/target_spec/{target_spec_id}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"input_layers_names": [
+"string"
+],
+"name": "string",
+"sensitivity_mode": "string",
+"off_nadir_angle_min": 0,
+"off_nadir_angle_max": 0,
+"satellite_elevation_angle_min": 0,
+"satellite_elevation_angle_max": 0,
+"solar_zenith_angle_min": 0,
+"solar_zenith_angle_max": 0,
+"start_time": "2019-08-24T14:15:22Z",
+"end_time": "2019-08-24T14:15:22Z",
+"recurrence_frequency": "string",
+"recurrence_interval": 0,
+"count": 0,
+"priority": 0
+}
+Response samples
+200400401404422
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"input_layers": [
+{}
+],
+"target_layer": {
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"bounds": []
+},
+"name": "string",
+"sensitivity_mode": "string",
+"off_nadir_angle_min": 0,
+"off_nadir_angle_max": 0,
+"satellite_elevation_angle_min": 0,
+"satellite_elevation_angle_max": 0,
+"solar_zenith_angle_min": 0,
+"solar_zenith_angle_max": 0,
+"start_time": "2019-08-24T14:15:22Z",
+"end_time": "2019-08-24T14:15:22Z",
+"recurrence_frequency": "string",
+"recurrence_interval": 0,
+"count": 0,
+"priority": 0
+}
+Get Target Spec
+Authorizations:
+ScopedAuth
+path Parameters
+target_spec_id
+required
+string (Target Spec Id)
+Responses
+200 OK
+401 Unauthorized
+404 Not Found
+
+get
+/api/v1/tasking/target_spec/{target_spec_id}
+Response samples
+200401404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"input_layers": [
+{}
+],
+"target_layer": {
+"id": 0,
+"name": "string",
+"verbose_name": "string",
+"bounds": []
+},
+"name": "string",
+"sensitivity_mode": "string",
+"off_nadir_angle_min": 0,
+"off_nadir_angle_max": 0,
+"satellite_elevation_angle_min": 0,
+"satellite_elevation_angle_max": 0,
+"solar_zenith_angle_min": 0,
+"solar_zenith_angle_max": 0,
+"start_time": "2019-08-24T14:15:22Z",
+"end_time": "2019-08-24T14:15:22Z",
+"recurrence_frequency": "string",
+"recurrence_interval": 0,
+"count": 0,
+"priority": 0
+}
+Common
+Search for existing administrative areas
+Authorizations:
+OptionalAuth
+query Parameters
+search
+required
+string (Search)
+Responses
+200 OK
+
+get
+/api/v1/common/administrative-areas
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+[
+{
+"gadm_composite_id": "string",
+"name": "string",
+"bbox": []
+}
+]
+Get an administrative area geojson by model and primary key
+Authorizations:
+OptionalAuth
+path Parameters
+gadm_composite_id
+required
+string (Gadm Composite Id)
+Responses
+200 OK
+
+get
+/api/v1/common/administrative-area/{gadm_composite_id}/geojson
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"bbox": [
+0,
+0,
+0,
+0
+],
+"type": "MultiPolygon",
+"coordinates": [
+[]
+]
+}
+Community
+Create or Update Operator Report [Limited Beta]
+Create an Operator Report by sending a request payload without an id. Update an Operator Report by sending a request payload with the operator report's id.
+
+Any fields not provided in the request payload will be left unchanged. To unset a field, provide an empty string for the field. The endpoint does not currently support unsetting the leak image. Request must be formatted as multipart/form-data.
+
+Carbon Mapper does not verify or endorse operator-submitted reports and reserves the right not to post or to remove submitted information from the Data Portal. Reports are provided on a voluntary basis as part of a best-effort research and transparency capability, and may not reflect validated emissions data. Operator investigation of emission events posted on the portal and voluntary submittal of any information does not constitute acceptance or confirmation by the operator of the estimated emission rate. Identified emissions may also be the product of normal operations that comply with the various state and/or federal regulations and permit limits.
+
+Authorizations:
+ScopedAuth
+Request Body schema: multipart/form-data
+id	
+string <uuid> (Id)
+[Required on Update] UUID of existing report to update. Do not include for new reports.
+
+Example: a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb
+
+plume_identifier	
+string (Plume Identifier)
+[Required on Create] Plume UUID or Plume ID
+
+Examples: a50766c6-4ae3-40bd-86b2-f7a5ffde1ffb, GAO20230628t191011p0000-B
+
+investigation_date	
+string <date> (Investigation Date)
+[Required on Create] Date of investigation. Date must be ISO-formatted according to RFC 3339
+
+Examples: 2025-01-23
+
+investigation_method	
+string (Investigation Method)
+Enum: "Survey" "Desktop Analysis"
+[Required on Create] Method of investigation
+
+notes	
+string (Notes)
+Miscellaneous notes
+
+reported_by	
+string (Reported By)
+Name of the person reporting the incident
+
+operator_name	
+string (Operator Name)
+Name of facility operator
+
+classification	
+string (Classification)
+Enum: "Unexpected" "Expected" "Unknown"
+Report Classification. One of the following:
+
+Unexpected: unexpected leak/malfunction people
+Expected: expected process emission
+Unknown: geolocation error or source not located at operator's facility, couldn't identify potential source / unknown
+Additional fields below allowed/prohibited based on classification
+
+equipment_group	
+string (Equipment Group)
+[Classification UNEXPECTED & EXPECTED] A general category of infrastructure or process equipment, such as a separator, tank, or wellhead, that contains or supports one or more potential leak points and reflects standard functional groupings used in oil and gas or industrial systems
+
+component	
+string (Component)
+[Classification UNEXPECTED] A specific part or connection point within an equipment group, such as a valve, flange, or threaded fitting, that represents the likely source of a leak and corresponds to a discrete, repairable element in the system
+
+location	
+Array of items (Location) = 2 items
+[Classification UNEXPECTED] Point Coordinates (Longitude, Latitude).
+
+To send the pair of coordinates via multipart/form-data, use the location key twice. First for longitude and second for latitude (curl e.g. -F 'location=-87.6289' -F 'location=41.8977')
+
+location_description	
+string (Location Description)
+[Classification UNEXPECTED] Location description
+
+confirmed_date	
+string <date> (Confirmed Date)
+[Classification UNEXPECTED] Confirmation date.Date must be ISO-formatted according to RFC 3339
+
+Examples: 2025-01-23
+
+survey_method	
+string (Survey Method)
+[Classification UNEXPECTED] Survey method
+
+leak_status	
+string (Leak Status)
+Enum: "Needs Repair" "Needs Verification" "Delay of Repair" "Repaired and Verified"
+[Classification UNEXPECTED] Leak status
+
+leak_notes	
+string (Leak Notes)
+[Classification UNEXPECTED] Leak notes
+
+leak_image	
+string <binary> (Leak Image)
+[Classification UNEXPECTED] Image file to be sent via multipart/form-data using the leak_image key (curl e.g. -F 'leak_image=@path/to/image.jpg')
+
+repair_status	
+string (Repair Status)
+[Classification UNEXPECTED] Repair status
+
+repair_date	
+string <date> (Repair Date)
+[Classification UNEXPECTED] Repair date. Date must be ISO-formatted according to RFC 3339
+
+Examples: 2025-01-23
+
+repair_notes	
+string (Repair Notes)
+[Classification UNEXPECTED] Repair notes
+
+verification_status	
+string (Verification Status)
+[Classification UNEXPECTED] Verification status
+
+verification_date	
+string <date> (Verification Date)
+[Classification UNEXPECTED] Verification date. Date must be ISO-formatted according to RFC 3339
+
+Examples: 2025-01-23
+
+verification_notes	
+string (Verification Notes)
+[Classification UNEXPECTED] Verification notes
+
+verification_method	
+string (Verification Method)
+[Classification UNEXPECTED] Verification method
+
+activity_type	
+string (Activity Type)
+[Classification EXPECTED] Activity type
+
+activity_detail_notes	
+string (Activity Detail Notes)
+[Classification EXPECTED] Activity detail notes
+
+activity_date	
+string <date> (Activity Date)
+[Classification EXPECTED] Activity date. Date must be ISO-formatted according to RFC 3339
+
+Examples: 2025-01-23
+
+Responses
+200 OK
+400 Bad Request
+403 Forbidden
+404 Not Found
+
+post
+/api/v1/community/operator_report
+Response samples
+200400403404
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"location": [
+0,
+0
+],
+"plume_id": "string",
+"leak_image_url": "string",
+"published": false,
+"id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+"reported_by": "string",
+"operator_name": "string",
+"investigation_date": "2019-08-24",
+"investigation_method": "string",
+"notes": "string",
+"classification": "string",
+"equipment_group": "string",
+"component": "string",
+"location_description": "string",
+"confirmed_date": "2019-08-24",
+"survey_method": "string",
+"leak_notes": "string",
+"leak_status": "string",
+"repair_status": "string",
+"repair_date": "2019-08-24",
+"repair_notes": "string",
+"verification_status": "string",
+"verification_date": "2019-08-24",
+"verification_notes": "string",
+"verification_method": "string",
+"activity_type": "string",
+"activity_detail_notes": "string",
+"activity_date": "2019-08-24"
+}
+Get Operator Reports [Limited Beta]
+Authorizations:
+ScopedAuth
+query Parameters
+id	
+Id (string) or Id (null) (Id)
+plume_ids	
+Array of Plume Ids (strings) or Plume Ids (null) (Plume Ids)
+published	
+Published (boolean) or Published (null) (Published)
+owned	
+Owned (boolean) or Owned (null) (Owned)
+limit	
+integer (Limit) >= 1
+Default: 100
+offset	
+integer (Offset) >= 0
+Default: 0
+Responses
+200 OK
+401 Unauthorized
+
+get
+/api/v1/community/operator_reports
+Request samples
+Python
+
+Copy
+import requests
+
+access_token = "<your_access_token>"
+response = requests.get(
+    "https://api.carbonmapper.org/api/v1/community/operator_reports",
+    headers={"Authorization": f"Bearer {access_token}"},
+)
+Response samples
+200401
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"items": [
+{}
+],
+"count": 0
+}

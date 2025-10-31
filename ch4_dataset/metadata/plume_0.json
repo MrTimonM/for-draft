@@ -1,0 +1,13 @@
+{
+  "plume_id": "81813edf-3ab7-4bb6-820b-c280b64a134a",
+  "plume_name": "plume_0",
+  "gas": "CH4",
+  "emission_auto": 812.7793901420761,
+  "datetime": null,
+  "instrument": "av3",
+  "quality": null,
+  "sector": "1B1a",
+  "geometry": null,
+  "assets": {},
+  "downloaded_files": {}
+}

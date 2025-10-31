@@ -1,0 +1,13 @@
+{
+  "plume_id": "f747310d-e9ef-43a2-9622-98de7c417520",
+  "plume_name": "plume_1",
+  "gas": "CH4",
+  "emission_auto": null,
+  "datetime": null,
+  "instrument": "av3",
+  "quality": null,
+  "sector": "1B1a",
+  "geometry": null,
+  "assets": {},
+  "downloaded_files": {}
+}
